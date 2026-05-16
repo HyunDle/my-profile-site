@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안현성 - 풀스택 개발자</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+
+        /* 타이핑 애니메이션 */
+        @keyframes typing {
+            0% {
+                width: 0;
+                border-right: 2px solid rgba(99, 102, 241, 0.8);
+            }
+            50% {
+                border-right: 2px solid rgba(99, 102, 241, 0.8);
+            }
+            100% {
+                width: 100%;
+                border-right: none;
+            }
+        }
+
+        .typing {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end) forwards;
+        }
+
+        /* 페이드인 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .fade-in-up-delay-1 {
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-2 {
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-3 {
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        /* 스킬 배지 호버 효과 */
+        .skill-badge {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        /* 프로젝트 카드 호버 효과 */
+        .project-card {
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        /* 글로우 효과 */
+        .glow-effect {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Navbar 스크롤 상태 */
+        nav.scrolled {
+            background-color: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 그라디언트 텍스트 */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 호버 버튼 효과 */
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+        }
+
+        /* 스크롤바 숨김 */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 모바일 햄버거 메뉴 */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background-color: rgba(15, 23, 42, 0.98);
+                width: 100%;
+                padding: 20px;
+                border-top: 1px solid rgba(99, 102, 241, 0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text">
+                안현성
+            </div>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-links hidden md:flex gap-8">
+                <a href="#about" class="hover:text-orange-400 transition">소개</a>
+                <a href="#skills" class="hover:text-orange-400 transition">기술</a>
+                <a href="#projects" class="hover:text-orange-400 transition">프로젝트</a>
+                <a href="#contact" class="hover:text-orange-400 transition">연락</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center pt-20 px-4">
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="fade-in-up">
+                    <p class="text-orange-500 font-semibold text-lg mb-4">안녕하세요.</p>
+
+                    <h1 class="text-5xl sm:text-6xl font-bold mb-4 leading-tight">
+                        저는 <span class="text-orange-500">안현성</span>
+                    </h1>
+
+                    <p class="text-3xl sm:text-4xl font-bold mb-8 text-slate-200">
+                        풀스택 개발자
+                    </p>
+
+                    <p class="text-lg text-slate-400 mb-12 max-w-md">
+                        나는 개쩌는 풀스택 개발자 지금은 AI 디지털 교육자료 프로젝트에 있지
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 fade-in-up-delay-1">
+                        <a href="#projects" class="btn-primary px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold transition-all">
+                            프로젝트 보기
+                        </a>
+                        <a href="#contact" class="btn-primary px-8 py-3 border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-lg font-semibold transition-all">
+                            이력서
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Profile Image -->
+                <div class="fade-in-up-delay-1 flex justify-center">
+                    <div class="relative w-64 h-64 sm:w-80 sm:h-80">
+                        <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-full opacity-80 blur-2xl"></div>
+                        <div class="relative w-full h-full rounded-full border-4 border-orange-500 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
+                            <div class="text-7xl">👨‍💻</div>
+                        </div>
+
+                        <!-- Decorative shapes -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 border-2 border-orange-500 opacity-30"></div>
+                        <div class="absolute -bottom-10 -left-10 w-20 h-20 border-2 border-orange-500 opacity-30"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Horizontal Scroll -->
+            <div class="mt-20 fade-in-up-delay-2">
+                <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">HTML5</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">CSS</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">JavaScript</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">React</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">Java</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">Spring</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">Kubernetes</span>
+                    <span class="px-6 py-2 bg-slate-800 rounded-full text-slate-400 text-sm font-medium whitespace-nowrap hover:text-orange-500 transition">Kafka</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-900">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Timeline -->
+                <div class="space-y-8 fade-in-up">
+                    <div class="flex gap-6">
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">💻</div>
+                            <div class="w-1 h-16 bg-gradient-to-b from-orange-500 to-transparent mt-2"></div>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-xl font-bold text-white mb-2">웹사이트 개발</h3>
+                            <p class="text-slate-400">React, JavaScript, HTML/CSS를 활용한 모던 웹 개발</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">📱</div>
+                            <div class="w-1 h-16 bg-gradient-to-b from-orange-500 to-transparent mt-2"></div>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-xl font-bold text-white mb-2">백엔드 개발</h3>
+                            <p class="text-slate-400">Java, Spring을 활용한 안정적인 서버 개발</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">🚀</div>
+                        </div>
+                        <div class="pt-2">
+                            <h3 class="text-xl font-bold text-white mb-2">인프라 & DevOps</h3>
+                            <p class="text-slate-400">Kubernetes, Kafka 등 확장 가능한 시스템 구축</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Stats -->
+                <div class="fade-in-up-delay-1">
+                    <h2 class="text-4xl font-bold mb-8">
+                        나에 대해
+                    </h2>
+
+                    <p class="text-slate-300 text-lg mb-12 leading-relaxed">
+                        나는 개쩌는 풀스택 개발자로, 프론트엔드부터 백엔드, 인프라까지 전반적인 개발 경험을 갖추고 있습니다.
+                        현재 <span class="text-orange-500 font-semibold">AI 디지털 교육자료 프로젝트</span>에서 의미 있는 서비스를 만들고 있습니다.
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="bg-slate-800 rounded-lg p-6 text-center hover:bg-slate-700 transition">
+                            <p class="text-3xl font-bold text-orange-500 mb-2">10+</p>
+                            <p class="text-slate-400 text-sm">프로젝트</p>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-6 text-center hover:bg-slate-700 transition">
+                            <p class="text-3xl font-bold text-orange-500 mb-2">95%</p>
+                            <p class="text-slate-400 text-sm">만족도</p>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-6 text-center hover:bg-slate-700 transition">
+                            <p class="text-3xl font-bold text-orange-500 mb-2">5+</p>
+                            <p class="text-slate-400 text-sm">년 경험</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold mb-12 text-center">
+                기술 <span class="text-orange-500">스택</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Frontend -->
+                <div class="bg-slate-900 rounded-xl p-8 hover:bg-slate-800 transition fade-in-up">
+                    <h3 class="text-2xl font-semibold mb-6 text-orange-500">Frontend</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">HTML5</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">CSS3</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">JavaScript</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">React</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend -->
+                <div class="bg-slate-900 rounded-xl p-8 hover:bg-slate-800 transition fade-in-up-delay-1">
+                    <h3 class="text-2xl font-semibold mb-6 text-orange-500">Backend</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Java</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Spring Boot</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Spring Framework</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps & Infrastructure -->
+                <div class="bg-slate-900 rounded-xl p-8 hover:bg-slate-800 transition fade-in-up-delay-2">
+                    <h3 class="text-2xl font-semibold mb-6 text-orange-500">DevOps & Infra</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Kubernetes</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Kafka</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">JMeter</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            <span class="text-slate-300">Docker</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-900">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold mb-12 text-center">
+                프로<span class="text-orange-500">젝트</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden glow-effect hover:border-l-4 hover:border-orange-500 transition-all">
+                    <div class="h-40 bg-gradient-to-br from-orange-500 to-red-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">AI 디지털 교육자료</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            현재 진행 중. AI를 활용한 디지털 교육자료 개발.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">React</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">Spring</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">AI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden glow-effect hover:border-l-4 hover:border-orange-500 transition-all">
+                    <div class="h-40 bg-gradient-to-br from-orange-400 to-yellow-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">웹 애플리케이션</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            모던 웹 기술을 활용한 풀스택 애플리케이션 개발.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">JavaScript</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">React</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden glow-effect hover:border-l-4 hover:border-orange-500 transition-all">
+                    <div class="h-40 bg-gradient-to-br from-orange-600 to-pink-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">마이크로서비스</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Kubernetes와 Kafka를 활용한 확장 가능한 시스템.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">Kubernetes</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">Kafka</span>
+                            <span class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-3 py-1 rounded-full">Java</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-slate-800">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-12">
+                연<span class="text-orange-500">락</span>하기
+            </h2>
+
+            <p class="text-lg text-slate-300 mb-12">
+                궁금한 점이 있으신가요? 언제든 연락해주세요!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <!-- Email -->
+                <a href="mailto:dksgustjd0088@mgail.com" class="group w-full sm:w-auto">
+                    <div class="p-8 bg-slate-700 rounded-xl hover:bg-gradient-to-br hover:from-orange-600 hover:to-red-600 transition-all duration-300 glow-effect cursor-pointer">
+                        <div class="text-4xl mb-3">✉️</div>
+                        <p class="font-semibold">Email</p>
+                        <p class="text-slate-400 text-sm">dksgustjd0088@mgail.com</p>
+                    </div>
+                </a>
+
+                <!-- GitHub (Placeholder) -->
+                <a href="#" class="group w-full sm:w-auto">
+                    <div class="p-8 bg-slate-700 rounded-xl hover:bg-gradient-to-br hover:from-orange-600 hover:to-red-600 transition-all duration-300 glow-effect cursor-pointer">
+                        <div class="text-4xl mb-3">💻</div>
+                        <p class="font-semibold">GitHub</p>
+                        <p class="text-slate-400 text-sm">github.com/username</p>
+                    </div>
+                </a>
+
+                <!-- LinkedIn (Placeholder) -->
+                <a href="#" class="group w-full sm:w-auto">
+                    <div class="p-8 bg-slate-700 rounded-xl hover:bg-gradient-to-br hover:from-orange-600 hover:to-red-600 transition-all duration-300 glow-effect cursor-pointer">
+                        <div class="text-4xl mb-3">💼</div>
+                        <p class="font-semibold">LinkedIn</p>
+                        <p class="text-slate-400 text-sm">linkedin.com/in/username</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 py-8 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-400">
+            <p>&copy; 2024 안현성. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar 스크롤 감지
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 모바일 햄버거 메뉴
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // 네비게이션 링크 클릭 시 메뉴 닫기
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Intersection Observer - 스크롤 진입 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // 애니메이션할 요소들 관찰
+        document.querySelectorAll('.project-card, .skill-badge').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // 매끄러운 스크롤 (이미 CSS에서 정의됨)
+        // 링크 클릭 시 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
